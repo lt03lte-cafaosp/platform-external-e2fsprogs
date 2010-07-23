@@ -1,7 +1,7 @@
 LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 
-LOCAL_SRC_FILES := \
+uuid_common_SRC_FILES := \
 	clear.c \
 	compare.c \
 	copy.c \
@@ -13,13 +13,9 @@ LOCAL_SRC_FILES := \
 	unparse.c \
 	uuid_time.c
 
+uuid_common_C_INCLUDES := external/e2fsprogs/lib
 
-LOCAL_MODULE := libext2_uuid
-LOCAL_MODULE_TAGS:= eng
-
-LOCAL_C_INCLUDES := external/e2fsprogs/lib
-
-LOCAL_CFLAGS := -O2 -g -W -Wall \
+uuid_common_CFLAGS := -O2 -g -W -Wall \
 	-DHAVE_INTTYPES_H \
 	-DHAVE_UNISTD_H \
 	-DHAVE_ERRNO_H \
@@ -43,6 +39,34 @@ LOCAL_CFLAGS := -O2 -g -W -Wall \
 	-DHAVE_LINUX_FD_H \
 	-DHAVE_TYPE_SSIZE_T
 
+
+include $(CLEAR_VARS)
+
+LOCAL_SRC_FILES := $(uuid_common_SRC_FILES)
+
+LOCAL_MODULE := libext2_uuid
+LOCAL_MODULE_TAGS:= eng
+
+LOCAL_C_INCLUDES := $(uuid_common_C_INCLUDES)
+
+LOCAL_CFLAGS := $(uuid_common_CFLAGS)
+
 LOCAL_PRELINK_MODULE := false
 
 include $(BUILD_SHARED_LIBRARY)
+
+
+include $(CLEAR_VARS)
+
+LOCAL_SRC_FILES := $(uuid_common_SRC_FILES)
+
+LOCAL_MODULE := libext2_uuid
+LOCAL_MODULE_TAGS:= eng
+
+LOCAL_C_INCLUDES := $(uuid_common_C_INCLUDES)
+
+LOCAL_CFLAGS := $(uuid_common_CFLAGS)
+
+LOCAL_PRELINK_MODULE := false
+
+include $(BUILD_STATIC_LIBRARY)

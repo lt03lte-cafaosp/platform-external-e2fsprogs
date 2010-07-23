@@ -1,19 +1,15 @@
 LOCAL_PATH := $(call my-dir)
-include $(CLEAR_VARS)
 
-LOCAL_SRC_FILES := \
+libext2_com_err_common_SRC_FILES := \
 	error_message.c \
 	et_name.c \
 	init_et.c \
 	com_err.c \
 	com_right.c
 
-LOCAL_MODULE := libext2_com_err
-LOCAL_MODULE_TAGS := eng
+libext2_com_err_common_C_INCLUDES := external/e2fsprogs/lib
 
-LOCAL_C_INCLUDES := external/e2fsprogs/lib
-
-LOCAL_CFLAGS := -O2 -g -W -Wall \
+libext2_com_err_common_CFLAGS := -O2 -g -W -Wall \
 	-DHAVE_UNISTD_H \
 	-DHAVE_ERRNO_H \
 	-DHAVE_NETINET_IN_H \
@@ -36,7 +32,36 @@ LOCAL_CFLAGS := -O2 -g -W -Wall \
 	-DHAVE_LINUX_FD_H \
 	-DHAVE_TYPE_SSIZE_T
 
+# Shared library
+include $(CLEAR_VARS)
+
+LOCAL_SRC_FILES := $(libext2_com_err_common_SRC_FILES)
+
+LOCAL_MODULE := libext2_com_err
+LOCAL_MODULE_TAGS := eng
+
+LOCAL_C_INCLUDES := $(libext2_com_err_common_C_INCLUDES)
+
+LOCAL_CFLAGS := $(libext2_com_err_common_CFLAGS)
+
 LOCAL_PRELINK_MODULE := false
 
 include $(BUILD_SHARED_LIBRARY)
+
+# Static library
+include $(CLEAR_VARS)
+
+LOCAL_SRC_FILES := $(libext2_com_err_common_SRC_FILES)
+
+LOCAL_MODULE := libext2_com_err
+LOCAL_MODULE_TAGS := eng
+
+LOCAL_C_INCLUDES := $(libext2_com_err_common_C_INCLUDES)
+
+LOCAL_CFLAGS := $(libext2_com_err_common_CFLAGS)
+
+LOCAL_PRELINK_MODULE := false
+
+include $(BUILD_STATIC_LIBRARY)
+
 

@@ -1,7 +1,7 @@
 LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 
-LOCAL_SRC_FILES := \
+ext2fs_common_SRC_FILES := \
 	ext2_err.c \
 	alloc.c \
 	alloc_sb.c \
@@ -58,21 +58,18 @@ LOCAL_SRC_FILES := \
 	version.c
 
 # get rid of this?!
-LOCAL_SRC_FILES += test_io.c
+ext2fs_common_SRC_FILES += test_io.c
 
-LOCAL_MODULE := libext2fs
-LOCAL_MODULE_TAGS := eng
-
-LOCAL_SYSTEM_SHARED_LIBRARIES := \
+ext2fs_common_LIBRARIES := \
 	libext2_com_err \
 	libext2_uuid \
 	libext2_blkid \
 	libext2_e2p \
 	libc
 
-LOCAL_C_INCLUDES := external/e2fsprogs/lib
+ext2fs_common_C_INCLUDES := external/e2fsprogs/lib
 
-LOCAL_CFLAGS := -O2 -g -W -Wall \
+ext2fs_common_CFLAGS := -O2 -g -W -Wall \
 	-DHAVE_UNISTD_H \
 	-DHAVE_ERRNO_H \
 	-DHAVE_NETINET_IN_H \
@@ -95,7 +92,38 @@ LOCAL_CFLAGS := -O2 -g -W -Wall \
 	-DHAVE_LINUX_FD_H \
 	-DHAVE_TYPE_SSIZE_T
 
+# Shared library
+include $(CLEAR_VARS)
+
+LOCAL_SRC_FILES := $(ext2fs_common_SRC_FILES)
+LOCAL_MODULE := libext2fs
+LOCAL_MODULE_TAGS := eng
+
+LOCAL_SYSTEM_SHARED_LIBRARIES := $(ext2fs_common_LIBRARIES)
+
+LOCAL_C_INCLUDES := $(ext2fs_common_C_INCLUDES)
+
+LOCAL_CFLAGS := $(ext2fs_common_CFLAGS)
+
 LOCAL_PRELINK_MODULE := false
 
 include $(BUILD_SHARED_LIBRARY)
+
+# Static library
+include $(CLEAR_VARS)
+
+LOCAL_SRC_FILES := $(ext2fs_common_SRC_FILES)
+LOCAL_MODULE := libext2fs
+LOCAL_MODULE_TAGS := eng
+
+LOCAL_STATIC_LIBRARIES := $(ext2fs_common_LIBRARIES)
+
+LOCAL_C_INCLUDES := $(ext2fs_common_C_INCLUDES)
+
+LOCAL_CFLAGS := $(ext2fs_common_CFLAGS)
+
+LOCAL_PRELINK_MODULE := false
+
+include $(BUILD_STATIC_LIBRARY)
+
 

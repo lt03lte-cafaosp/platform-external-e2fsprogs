@@ -1,19 +1,19 @@
 LOCAL_PATH := $(call my-dir)
 
 #########################################################################
-# Build mke2fs
+# Build mke2fs and mke2fs_static
 include $(CLEAR_VARS)
 
-LOCAL_SRC_FILES := \
+mke2fs_common_SRC_FILES := \
 	mke2fs.c \
 	util.c \
 	default_profile.c
 
-LOCAL_C_INCLUDES := \
+mke2fs_common_C_INCLUDES := \
 	external/e2fsprogs/lib \
 	external/e2fsprogs/e2fsck
 
-LOCAL_CFLAGS := -O2 -g -W -Wall \
+mke2fs_common_CFLAGS := -O2 -g -W -Wall \
 	-DHAVE_UNISTD_H \
 	-DHAVE_ERRNO_H \
 	-DHAVE_NETINET_IN_H \
@@ -38,12 +38,9 @@ LOCAL_CFLAGS := -O2 -g -W -Wall \
 	-DHAVE_TYPE_SSIZE_T \
 	-DHAVE_GETOPT_H
 
-LOCAL_CFLAGS += -DNO_CHECK_BB
+mke2fs_common_CFLAGS += -DNO_CHECK_BB
 
-LOCAL_MODULE := mke2fs
-LOCAL_MODULE_TAGS := eng
-
-LOCAL_SYSTEM_SHARED_LIBRARIES := \
+mke2fs_common_LIBRARIES := \
 	libext2fs \
 	libext2_blkid \
 	libext2_uuid \
@@ -52,22 +49,54 @@ LOCAL_SYSTEM_SHARED_LIBRARIES := \
 	libext2_e2p \
 	libc
 
+# Build mke2fs
+include $(CLEAR_VARS)
+LOCAL_SRC_FILES := $(mke2fs_common_SRC_FILES)
+
+LOCAL_C_INCLUDES := $(mke2fs_common_C_INCLUDES)
+
+LOCAL_CFLAGS := $(mke2fs_common_CFLAGS)
+
+LOCAL_MODULE := mke2fs
+LOCAL_MODULE_TAGS := eng
+
+LOCAL_SYSTEM_SHARED_LIBRARIES := $(mke2fs_common_LIBRARIES)
+
 include $(BUILD_EXECUTABLE)
 
+# Build mke2fs_static
+include $(CLEAR_VARS)
+LOCAL_SRC_FILES := $(mke2fs_common_SRC_FILES)
+
+LOCAL_C_INCLUDES := $(mke2fs_common_C_INCLUDES)
+
+LOCAL_CFLAGS := $(mke2fs_common_CFLAGS)
+
+LOCAL_MODULE := mke2fs_static
+
+# Setting tag to none to avoid copying it to /system/bin
+LOCAL_MODULE_TAGS := none
+LOCAL_FORCE_STATIC_EXECUTABLE := true
+
+LOCAL_STATIC_LIBRARIES := $(mke2fs_common_LIBRARIES)
+
+include $(BUILD_EXECUTABLE)
+
+
 ###########################################################################
-# Build tune2fs
+# Build tune2fs and tune2fs_static
 #
 include $(CLEAR_VARS)
 
-LOCAL_SRC_FILES := \
+tune2fs_common_SRC_FILES := \
 	tune2fs.c \
 	util.c
 
-LOCAL_C_INCLUDES := \
+tune2fs_common_C_INCLUDES := \
 	external/e2fsprogs/lib \
 	external/e2fsprogs/e2fsck
 
-LOCAL_CFLAGS := -O2 -g -W -Wall \
+tune2fs_common_CFLAGS := -O2 -g -W -Wall \
 	-DHAVE_UNISTD_H \
 	-DHAVE_ERRNO_H \
 	-DHAVE_NETINET_IN_H \
@@ -92,15 +121,53 @@ LOCAL_CFLAGS := -O2 -g -W -Wall \
 	-DHAVE_TYPE_SSIZE_T \
 	-DHAVE_GETOPT_H
 
-LOCAL_CFLAGS += -DNO_CHECK_BB
+tune2fs_common_CFLAGS += -DNO_CHECK_BB
 
-LOCAL_MODULE := tune2fs
-LOCAL_MODULE_TAGS := eng
-LOCAL_SYSTEM_SHARED_LIBRARIES := \
+tune2fs_common_LIBRARIES := \
 	libext2fs \
 	libext2_com_err \
 	libc
 
+# Build tune2fs
+include $(CLEAR_VARS)
+
+LOCAL_SRC_FILES := $(tune2fs_common_SRC_FILES)
+
+LOCAL_C_INCLUDES := $(tune2fs_common_C_INCLUDES)
+
+LOCAL_CFLAGS := $(tune2fs_common_CFLAGS)
+
+LOCAL_MODULE := tune2fs
+LOCAL_MODULE_TAGS := eng
+
+LOCAL_SYSTEM_SHARED_LIBRARIES := $(tune2fs_common_LIBRARIES)
+
+include $(BUILD_EXECUTABLE)
+
+# Build tune2fs_static
+include $(CLEAR_VARS)
+
+LOCAL_SRC_FILES := $(tune2fs_common_SRC_FILES)
+
+LOCAL_C_INCLUDES := $(tune2fs_common_C_INCLUDES)
+
+LOCAL_CFLAGS := $(tune2fs_common_CFLAGS)
+
+LOCAL_MODULE := tune2fs_static
+
+# Setting tag to none to avoid copying it to /system/bin
+LOCAL_MODULE_TAGS := none
+LOCAL_FORCE_STATIC_EXECUTABLE := true
+
+LOCAL_STATIC_LIBRARIES = \
+	libext2fs \
+	libext2_blkid \
+	libext2_uuid \
+	libext2_com_err \
+	libext2_e2p \
+	libc
+
+LOCAL_MODULE_PATH := $(TARGET_RECOVERY_ROOT_OUT_SBIN)
 include $(BUILD_EXECUTABLE)
 
 #########################################################################
