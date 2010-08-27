@@ -90,7 +90,8 @@ ext2fs_common_CFLAGS := -O2 -g -W -Wall \
 	-DHAVE_LSEEK64_PROTOTYPE \
 	-DHAVE_EXT2_IOCTLS \
 	-DHAVE_LINUX_FD_H \
-	-DHAVE_TYPE_SSIZE_T
+	-DHAVE_TYPE_SSIZE_T \
+	-DHAVE_MNTENT_H
 
 # Shared library
 include $(CLEAR_VARS)
