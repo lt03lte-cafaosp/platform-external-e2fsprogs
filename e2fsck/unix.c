@@ -70,6 +70,10 @@ e2fsck_t e2fsck_global_ctx;	/* Try your very best not to use this! */
 int journal_enable_debug = -1;
 #endif
 
+#ifndef ROOT_SYSCONFDIR
+#define ROOT_SYSCONFDIR "/etc/"
+#endif
+
 static void usage(e2fsck_t ctx)
 {
 	fprintf(stderr,
