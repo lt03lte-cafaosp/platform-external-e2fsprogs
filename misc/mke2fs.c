@@ -864,6 +864,9 @@ static void syntax_err_report(const char *filename, long err, int line_num)
 	exit(1);
 }
 
+#ifndef ROOT_SYSCONFDIR
+#define ROOT_SYSCONFDIR "/etc/"
+#endif
 static const char *config_fn[] = { ROOT_SYSCONFDIR "/mke2fs.conf", 0 };
 
 static void edit_feature(const char *str, __u32 *compat_array)
@@ -1956,8 +1959,11 @@ static void mke2fs_discard_blocks(ext2_filsys fs)
 	range[0] = 0;
 	range[1] = blocks * blocksize;
 
+#ifdef HAVE_OPEN64
 	fd = open64(fs->device_name, O_RDWR);
-
+#else
+	fd = open(fs->device_name, O_RDWR);
+#endif
 	/*
 	 * We don't care about whether the ioctl succeeds; it's only an
 	 * optmization for SSDs or sparse storage.
