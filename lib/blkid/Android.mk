@@ -1,4 +1,5 @@
 LOCAL_PATH := $(call my-dir)
+
 include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES := \
@@ -18,7 +19,6 @@ LOCAL_SRC_FILES := \
 
 LOCAL_MODULE := libext2_blkid
 LOCAL_MODULE_TAGS:= eng
-LOCAL_SYSTEM_SHARED_LIBRARIES := libext2_uuid libc
 
 LOCAL_C_INCLUDES := external/e2fsprogs/lib
 
@@ -47,4 +47,13 @@ LOCAL_CFLAGS := -O2 -g -W -Wall \
 
 LOCAL_PRELINK_MODULE := false
 
+LOCAL_SYSTEM_SHARED_LIBRARIES := \
+	libc
+
+ifneq ($(BUILD_E2FSCK),true)
+LOCAL_SYSTEM_SHARED_LIBRARIES += libext2_uuid
 include $(BUILD_SHARED_LIBRARY)
+else
+LOCAL_STATIC_LIBRARIES := libext2_uuid
+include $(BUILD_STATIC_LIBRARY)
+endif
