@@ -85,12 +85,13 @@ LOCAL_SRC_FILES :=  \
 	region.c
 
 LOCAL_MODULE := e2fsck
-LOCAL_MODULE_TAGS := eng
 
 LOCAL_SYSTEM_SHARED_LIBRARIES := \
 	libc
 
 ifneq ($(BUILD_E2FSCK),true)
+LOCAL_MODULE_TAGS := eng
+
 LOCAL_SYSTEM_SHARED_LIBRARIES += \
 	libext2fs \
 	libext2_blkid \
@@ -99,6 +100,8 @@ LOCAL_SYSTEM_SHARED_LIBRARIES += \
 	libext2_com_err \
 	libext2_e2p
 else
+LOCAL_MODULE_TAGS := user
+
 LOCAL_STATIC_LIBRARIES := \
 	libext2fs \
 	libext2_blkid \
