@@ -142,7 +142,7 @@ LOCAL_CFLAGS := $(e2fsck_cflags)
 LOCAL_SYSTEM_SHARED_LIBRARIES := $(e2fsck_system_shared_libraries)
 LOCAL_SHARED_LIBRARIES := $(e2fsck_shared_libraries)
 LOCAL_MODULE := e2fsck
-LOCAL_MODULE_TAGS := optional
+LOCAL_MODULE_TAGS := optional debug
 include $(BUILD_EXECUTABLE)
 
 include $(CLEAR_VARS)
